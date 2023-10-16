@@ -1,0 +1,50 @@
+version: '2'
+services:
+  ctfd:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ctfd-logs:/var/log/CTFd
+      - ./ctfd-uploads:/var/uploads
+    environment:
+      GIT_PLUGINS: "https://github.com/puckk/CTFd-Plugin-unique-token.git"
+      DATABASE_URL: mysql+pymysql://root:ctfd@db/ctfd
+      LOG_FOLDER: /var/log/CTFd
+      REDIS_URL: redis://cache:6379
+      SECRET_KEY: your_secret_key
+      UPLOAD_FOLDER: /var/uploads
+      WORKERS: '4'
+    links:
+    - db:db
+    labels:
+      application: ctfd
+      io.rancher.container.pull_image: always
+  cache:
+    image: redis:4
+    volumes:
+    - ctfd-redis:/data
+  db:
+    image: mariadb:10.4.12
+    environment:
+      MYSQL_PASSWORD: ctfd
+      MYSQL_ROOT_PASSWORD: ctfd
+      MYSQL_USER: ctfd
+    volumes:
+    - ./ctfd-mysql:/var/lib/mysql
+    command:
+    - mysqld
+    - --character-set-server=utf8mb4
+    - --collation-server=utf8mb4_unicode_ci
+    - --wait_timeout=28800
+    - --log-warnings=0
+volumes:
+  ctfd-uploads:
+    driver: local
+  ctfd-logs:
+    driver: local
+  ctfd-mysql:
+    driver: local
+  ctfd-redis:
+    driver: local
