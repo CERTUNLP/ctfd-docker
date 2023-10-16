@@ -10,6 +10,8 @@ services:
       - ./ctfd-uploads:/var/uploads
     environment:
       GIT_PLUGINS: "https://github.com/puckk/CTFd-Plugin-unique-token.git"
+      GIT_THEMES_pixo: "https://github.com/hmrserver/CTFd-theme-pixo.git,pixo"
+      GIT_THEMES_odin: "https://github.com/0xdevsachin/CTFD-odin-theme.git,odin"
       DATABASE_URL: mysql+pymysql://root:ctfd@db/ctfd
       LOG_FOLDER: /var/log/CTFd
       REDIS_URL: redis://cache:6379
