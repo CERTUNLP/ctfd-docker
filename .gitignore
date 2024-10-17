@@ -1,3 +1,6 @@
+CTFd-Docker-Challenges/
+ctfd-mysql/
+
 .vagrant*
 bin
 docker/docker

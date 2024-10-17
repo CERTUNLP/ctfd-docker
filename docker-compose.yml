@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   ctfd:
     build:
@@ -9,7 +9,7 @@ services:
       - ./ctfd-logs:/var/log/CTFd
       - ./ctfd-uploads:/var/uploads
     environment:
-      GIT_PLUGINS: "https://github.com/puckk/CTFd-Plugin-unique-token.git"
+      GIT_PLUGINS_CTFd-Plugin-unique-token: "https://github.com/puckk/CTFd-Plugin-unique-token.git,CTFd-Plugin-unique-token"
       GIT_THEMES_pixo: "https://github.com/hmrserver/CTFd-theme-pixo.git,pixo"
       GIT_THEMES_odin: "https://github.com/0xdevsachin/CTFD-odin-theme.git,odin"
       DATABASE_URL: mysql+pymysql://root:ctfd@db/ctfd
@@ -18,16 +18,16 @@ services:
       SECRET_KEY: your_secret_key
       UPLOAD_FOLDER: /var/uploads
       REVERSE_PROXY: true
-      WORKERS: '4'
+      WORKERS: "4"
     links:
-    - db:db
+      - db:db
     labels:
       application: ctfd
       io.rancher.container.pull_image: always
   cache:
     image: redis:4
     volumes:
-    - ctfd-redis:/data
+      - ctfd-redis:/data
   db:
     image: mariadb:10.4.12
     environment:
@@ -35,13 +35,13 @@ services:
       MYSQL_ROOT_PASSWORD: ctfd
       MYSQL_USER: ctfd
     volumes:
-    - ./ctfd-mysql:/var/lib/mysql
+      - ./ctfd-mysql:/var/lib/mysql
     command:
-    - mysqld
-    - --character-set-server=utf8mb4
-    - --collation-server=utf8mb4_unicode_ci
-    - --wait_timeout=28800
-    - --log-warnings=0
+      - mysqld
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --wait_timeout=28800
+      - --log-warnings=0
 volumes:
   ctfd-uploads:
     driver: local

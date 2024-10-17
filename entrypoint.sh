@@ -3,18 +3,16 @@
 # Install plugins
 actual_dir=$(pwd)
 cd /opt/CTFd/CTFd/plugins/
-IFS=',' read -ra REPOS <<< "$GIT_PLUGINS"
-for repo in "${REPOS[@]}"; do
-  destination=$(basename "$repo" .git)
+# For each var that starts with GIT_PLUGINS_
+for var in "${!GIT_PLUGINS_@}"; do
+  # Split the var into an array of 2 elements
+  IFS=',' read -ra REPO <<< "${!var}"
   # If destination exists, skip
-  if [ -d "$destination" ]; then
-    echo "Already installed plugin $repo"
+  if [ -d "${REPO[1]}" ]; then
+    echo "Already installed theme ${REPO[0]}"
     continue
   fi
-  git clone "$repo"
-  if [ -f "$destination/requirements.txt" ]; then
-    pip install -r "$destination/requirements.txt"
-  fi
+  git clone "${REPO[0]}" "${REPO[1]}"
 done
 
 # Install themes
